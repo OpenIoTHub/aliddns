@@ -57,7 +57,12 @@ func GetMyPublicIpv6() string {
 	tmp2 := strings.Replace(tmp, "');", "", -1)
 	ipv6 := strings.Replace(tmp2, "\n", "", -1)
 	log.Println(ipv6)
-	return ipv6
+	ip := net.ParseIP(ipv6)
+	if ip == nil {
+		return ""
+	}
+	log.Println("got ipv6 addr:", ip.String())
+	return ip.String()
 }
 
 //TODO Test

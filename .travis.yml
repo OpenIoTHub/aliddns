@@ -1,0 +1,38 @@
+cache:
+  directories:
+    - $GOPATH/pkg/mod
+    - $HOME/.cache/go-build
+
+language: go
+
+go:
+  - 1.15.x
+env:
+  matrix:
+    - GO111MODULE=on
+  global:
+    -
+notifications:
+  email:
+    recipients:
+      - newfarry@126.com
+    on_success: always
+addons:
+  apt:
+    packages:
+      - snapcraft
+services:
+  - docker
+after_success:
+  - docker login -u=openiothub -p="$DOCKER_PASSWORD"
+  - snapcraft login --with snap.login
+  - rm snap.login
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: git checkout . && curl -sL https://git.io/goreleaser | bash
+    on:
+      tags: true
+before_install:
+  - openssl aes-256-cbc -K $encrypted_219439784b94_key -iv $encrypted_219439784b94_iv
+    -in snap.login.enc -out snap.login -d

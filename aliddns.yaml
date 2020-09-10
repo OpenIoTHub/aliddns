@@ -1,0 +1,5 @@
+accessid: '*AccessId'
+accesskey: '*AccessKey'
+maindomain: '*example.com'
+subdomainname: '*www'
+checkupdateinterval: 30

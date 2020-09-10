@@ -1,0 +1,116 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # you may remove this if you don't use vgo
+#    - go mod tidy
+#    - go mod vendor
+builds:
+- env:
+    - CGO_ENABLED=0
+    - GO111MODULE=on
+  ldflags:
+    - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser
+  goos:
+    - linux
+    - darwin
+    - windows
+  goarch:
+    - 386
+    - amd64
+    - arm
+    - arm64
+    - mips64
+    - mips64le
+    - mips
+    - mipsle
+  gomips:
+    - hardfloat
+    - softfloat
+  ignore:
+    - goos: darwin
+      goarch: 386
+archives:
+- replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+brews:
+  - github:
+      owner: OpenIoTHub
+      name: homebrew-tap
+    folder: Formula
+    homepage:  http://github.com/OpenIoTHub
+    description: Aliyun ddns service
+    test: |
+      system "#{bin}/aliddns -v"
+scoop:
+  bucket:
+    owner: OpenIoTHub
+    name: scoop-bucket
+  homepage:  http://github.com/OpenIoTHub
+  description: Aliyun ddns service
+  license: MIT
+nfpms:
+  - file_name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
+    homepage:  http://github.com/OpenIoTHub
+    description: Aliyun ddns service
+    maintainer: OpenIoTHub <newfarry@126.com>
+    license: MIT
+    vendor: aliddns
+    formats:
+      - deb
+      - rpm
+    scripts:
+      preinstall: "scripts/install_remove/preinstall.sh"
+      postinstall: "scripts/install_remove/postinstall.sh"
+      preremove: "scripts/install_remove/preremove.sh"
+      postremove: "scripts/install_remove/postremove.sh"
+    files:
+      "systemd/**": "/etc/systemd/system"
+    config_files:
+      "aliddns.yaml": "/etc/aliddns/aliddns.yaml"
+snapcrafts:
+  - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
+    summary: Aliyun ddns service.
+    description: |
+      Aliyun ddns service
+    grade: stable
+#    confinement: classic
+    publish: true
+    apps:
+      aliddns:
+        plugs: ["network", "network-bind"]
+        daemon: simple
+        command: aliddns
+dockers:
+  - image_templates:
+      - 'openiothub/aliddns:{{ .Tag }}'
+      - 'openiothub/aliddns:v{{ .Major }}.{{ .Minor }}'
+      - 'openiothub/aliddns:latest'
+    dockerfile: Dockerfile
+    binaries:
+      - aliddns
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+      - "--label=com.github.actions.name={{.ProjectName}}"
+
+    extra_files:
+      - scripts/entrypoint.sh

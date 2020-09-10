@@ -3,7 +3,7 @@ class AliddnsGo < Formula
   homepage "https://github.com/OpenIoTHub"
   url "https://github.com/OpenIoTHub/aliddns.git",
       tag:      "v0.0.1",
-      revision: "8df96b8ae676344c14277c61ee8ac8bb206d8ef9"
+      revision: "a4624c726c97c9265d21b0e008e3c338c1f3cfa9"
   license "MIT"
 
   depends_on "go" => :build

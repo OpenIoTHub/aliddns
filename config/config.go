@@ -10,7 +10,8 @@ import (
 	"path/filepath"
 )
 
-var ConfigFilePath = "./aliddns.yaml"
+var ConfigFileName = "aliddns.yaml"
+var ConfigFilePath = fmt.Sprintf("./%s", ConfigFileName)
 var ConfigModel = &models.ConfigModel{
 	AccessId:            "*AccessId",
 	AccessKey:           "*AccessKey",
@@ -33,6 +34,7 @@ func WriteConfigFile(ConfigMode *models.ConfigModel, path string) (err error) {
 }
 
 func InitConfigFile() {
+	LoadSnapcraftConfigPath()
 	//	生成配置文件模板
 	err := os.MkdirAll(filepath.Dir(ConfigFilePath), 0644)
 	if err != nil {
@@ -48,6 +50,7 @@ func InitConfigFile() {
 }
 
 func UseConfigFile() {
+	LoadSnapcraftConfigPath()
 	//配置文件存在
 	log.Println("使用的配置文件位置：", ConfigFilePath)
 	content, err := ioutil.ReadFile(ConfigFilePath)
@@ -59,5 +62,13 @@ func UseConfigFile() {
 	if err != nil {
 		log.Println(err.Error())
 		return
+	}
+}
+
+func LoadSnapcraftConfigPath() {
+	//是否是snapcraft应用，如果是则从snapcraft指定的工作目录保存配置文件
+	appDataPath, havaAppDataPath := os.LookupEnv("SNAP_USER_DATA")
+	if havaAppDataPath {
+		ConfigFilePath = filepath.Join(appDataPath, ConfigFileName)
 	}
 }

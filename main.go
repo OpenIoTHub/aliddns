@@ -40,6 +40,7 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) error {
+				config.LoadSnapcraftConfigPath()
 				config.InitConfigFile()
 				return nil
 			},
@@ -65,6 +66,7 @@ func main() {
 		},
 	}
 	myApp.Action = func(c *cli.Context) error {
+		config.LoadSnapcraftConfigPath()
 		_, err := os.Stat(config.ConfigFilePath)
 		if err != nil {
 			config.InitConfigFile()

@@ -34,7 +34,6 @@ func WriteConfigFile(ConfigMode *models.ConfigModel, path string) (err error) {
 }
 
 func InitConfigFile() {
-	LoadSnapcraftConfigPath()
 	//	生成配置文件模板
 	err := os.MkdirAll(filepath.Dir(ConfigFilePath), 0644)
 	if err != nil {
@@ -50,7 +49,6 @@ func InitConfigFile() {
 }
 
 func UseConfigFile() {
-	LoadSnapcraftConfigPath()
 	//配置文件存在
 	log.Println("使用的配置文件位置：", ConfigFilePath)
 	content, err := ioutil.ReadFile(ConfigFilePath)

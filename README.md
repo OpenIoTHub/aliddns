@@ -5,10 +5,12 @@
 
 ```batch
 aliddns -c /path/to/config/file/aliddns.yaml
-or just:
-aliddns
-(use default config file: ./aliddns.yaml)
 ```
+or just:
+```
+aliddns
+```
+(use default config file: ./aliddns.yaml)
 
 You can install the pre-compiled binary (in several different ways),
 use Docker.

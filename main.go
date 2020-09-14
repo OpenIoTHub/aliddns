@@ -46,6 +46,56 @@ func main() {
 			},
 		},
 		{
+			Name:    "run",
+			Aliases: []string{"r"},
+			Usage:   "run without config file",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:        "id",
+					Aliases:     []string{"i"},
+					Value:       config.ConfigModel.AccessId,
+					Usage:       "aliyun AccessId",
+					EnvVars:     []string{"AccessId"},
+					Destination: &config.ConfigModel.AccessId,
+				},
+				&cli.StringFlag{
+					Name:        "key",
+					Aliases:     []string{"k"},
+					Value:       config.ConfigModel.AccessKey,
+					Usage:       "aliyun AccessKey",
+					EnvVars:     []string{"AccessKey"},
+					Destination: &config.ConfigModel.AccessKey,
+				},
+				&cli.StringFlag{
+					Name:        "maindomain",
+					Aliases:     []string{"m"},
+					Value:       config.ConfigModel.MainDomain,
+					Usage:       "aliyun MainDomain",
+					EnvVars:     []string{"MainDomain"},
+					Destination: &config.ConfigModel.MainDomain,
+				},
+				&cli.StringFlag{
+					Name:        "subdomain",
+					Aliases:     []string{"s"},
+					Value:       config.ConfigModel.SubDomainName,
+					Usage:       "SubDomainName",
+					EnvVars:     []string{"SubDomainName"},
+					Destination: &config.ConfigModel.SubDomainName,
+				},
+				&cli.IntFlag{
+					Name:        "interval",
+					Aliases:     []string{"c"},
+					Value:       config.ConfigModel.CheckUpdateInterval,
+					Usage:       "CheckUpdateInterval",
+					EnvVars:     []string{"CheckUpdateInterval"},
+					Destination: &config.ConfigModel.CheckUpdateInterval,
+				},
+			},
+			Action: func(c *cli.Context) error {
+				return timerFunction()
+			},
+		},
+		{
 			Name:    "test",
 			Aliases: []string{"t"},
 			Usage:   "test this command",

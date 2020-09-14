@@ -3,7 +3,7 @@
 
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/aliddns)
 
-```batch
+```sh
 aliddns -c /path/to/config/file/aliddns.yaml
 ```
 or just:
@@ -39,7 +39,9 @@ $ sudo snap install aliddns
 config file path: /root/snap/aliddns/current/aliddns.yaml
 
 edit config file then:
+```sh
 sudo snap restart aliddns
+```
 
 **scoop**:
 
@@ -56,7 +58,9 @@ install with `dpkg -i` and `rpm -i` respectively.
 config file path: /etc/aliddns/aliddns.yaml
 
 edit config file then:
+```sh
 sudo systemctl restart aliddns
+```
 
 **Shell script**:
 

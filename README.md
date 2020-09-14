@@ -12,6 +12,12 @@ aliddns
 ```
 (use default config file: ./aliddns.yaml)
 
+or:
+```sh
+ aliddns run -i myid -k mykey -m iothub.cloud -s www -c 60
+```
+-i {AccessId} -k {AccessKey} -m {MainDomain} -s {SubDomainName} -c {CheckUpdateInterval}
+
 You can install the pre-compiled binary (in several different ways),
 use Docker.
 
@@ -79,9 +85,12 @@ You can also use it within a Docker container. To do that, you'll need to
 execute something more-or-less like the following:
 
 ```sh
-$ docker run openiothub/gateway:latest
+$ docker run openiothub/gateway:latest run -i {AccessId} -k {AccessKey} -m {MainDomain} -s {SubDomainName} -c {CheckUpdateInterval}
 ```
-
+example:
+```sh
+$ docker run openiothub/gateway:latest run -i myid -k mykey -m iothub.cloud -s www -c 60
+```
 Note that the image will almost always have the last stable Go version.
 
 [releases]: https://github.com/OpenIoTHub/aliddns/releases

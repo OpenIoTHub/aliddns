@@ -1,9 +1,9 @@
-class AliddnsGo < Formula
+class Aliddns < Formula
   desc "Aliyun ddns service"
   homepage "https://github.com/OpenIoTHub"
   url "https://github.com/OpenIoTHub/aliddns.git",
-      tag:      "v0.0.1",
-      revision: "a4624c726c97c9265d21b0e008e3c338c1f3cfa9"
+      tag:      "v0.0.5",
+      revision: "bebda34d7f36148bc410706063fb9cec6d9ff1df"
   license "MIT"
 
   depends_on "go" => :build

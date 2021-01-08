@@ -48,7 +48,7 @@ changelog:
     - '^docs:'
     - '^test:'
 brews:
-  - github:
+  - tap:
       owner: OpenIoTHub
       name: homebrew-tap
     folder: Formula

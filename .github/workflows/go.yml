@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  gateway-go:
+  aliddns:
     runs-on: ubuntu-latest
     steps:
       -

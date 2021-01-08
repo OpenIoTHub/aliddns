@@ -78,10 +78,12 @@ nfpms:
       postinstall: "scripts/install_remove/postinstall.sh"
       preremove: "scripts/install_remove/preremove.sh"
       postremove: "scripts/install_remove/postremove.sh"
-    files:
-      "systemd/**": "/etc/systemd/system"
-    config_files:
-      "aliddns.yaml": "/etc/aliddns/aliddns.yaml"
+    contents:
+      - src: systemd/**
+        dst: /etc/systemd/system
+      - src: aliddns.yaml
+        dst: /etc/aliddns/aliddns.yaml
+        type: config
 snapcrafts:
   - name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
     summary: Aliyun ddns service.

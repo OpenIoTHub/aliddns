@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var ConfigFileName = "aliddns.yaml"
@@ -18,13 +19,14 @@ var ConfigModel = &models.ConfigModel{
 	MainDomain:          "*example.com",
 	SubDomainName:       "*www",
 	CheckUpdateInterval: 30,
+	Protocol: 			 "all",
 }
 
 //将配置写入指定的路径的文件
 func WriteConfigFile(ConfigMode *models.ConfigModel, path string) (err error) {
 	configByte, err := yaml.Marshal(ConfigMode)
 	if err != nil {
-		log.Println(err.Error())
+		log.Fatalln(err.Error())
 		return
 	}
 	if ioutil.WriteFile(path, configByte, 0644) == nil {
@@ -44,23 +46,32 @@ func InitConfigFile() {
 		fmt.Println("config created")
 		return
 	}
-	log.Println("写入配置文件模板出错，请检查本程序是否具有写入权限！或者手动创建配置文件。")
-	log.Println(err.Error())
+	log.Fatalln("写入配置文件模板出错，请检查本程序是否具有写入权限！或者手动创建配置文件。")
 }
 
+var SupportedProtocols = [3] string {"ipv4", "ipv6", "all"}
 func UseConfigFile() {
 	//配置文件存在
 	log.Println("使用的配置文件位置：", ConfigFilePath)
 	content, err := ioutil.ReadFile(ConfigFilePath)
 	if err != nil {
-		log.Println(err.Error())
+		log.Fatalln(err.Error())
 		return
 	}
 	err = yaml.Unmarshal(content, ConfigModel)
 	if err != nil {
-		log.Println(err.Error())
+		log.Fatalln(err.Error())
 		return
 	}
+	// 判断 protocol 是否正确
+	protocol := strings.ToLower(ConfigModel.Protocol)
+	for _, val := range SupportedProtocols {
+		if val == protocol {
+			return
+		}
+	}
+	log.Fatalf("不支援的协议 '%s'；目前支援 ipv4，ipv6 或 all\n", ConfigModel.Protocol)
+	return
 }
 
 func LoadSnapcraftConfigPath() {

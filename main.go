@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"github.com/OpenIoTHub/alidns/config"
 	"github.com/OpenIoTHub/alidns/utils"
@@ -90,6 +89,14 @@ func main() {
 					EnvVars:     []string{"CheckUpdateInterval"},
 					Destination: &config.ConfigModel.CheckUpdateInterval,
 				},
+				&cli.StringFlag{
+					Name:        "protocol",
+					Aliases:     []string{"p"},
+					Value:       config.ConfigModel.Protocol,
+					Usage:       "Protocol",
+					EnvVars:     []string{"Protocol"},
+					Destination: &config.ConfigModel.Protocol,
+				},
 			},
 			Action: func(c *cli.Context) error {
 				return timerFunction()
@@ -131,46 +138,53 @@ func main() {
 }
 
 func update() {
-	publicIpv4 := utils.GetMyPublicIpv4()
-	if publicIpv4 == "" {
-		log.Println("获取自己的IPV4地址失败！")
-		return
+	// 获取 IP
+	protocol := config.ConfigModel.Protocol
+	publicIpv4 := ""
+	publicIpv6 := ""
+	if protocol == "ipv4" || protocol == "all" {
+		publicIpv4 = utils.GetMyPublicIpv4()
+		if publicIpv4 == "" {
+			log.Println("获取自己的IPV4地址失败！")
+			return
+		}
 	}
-	publicIpv6 := utils.GetMyPublicIpv6()
-	if publicIpv4 == "" {
-		log.Println("获取自己的IPV6地址失败！")
-		return
+	if protocol == "ipv6" || protocol == "all" {
+		publicIpv6 = utils.GetMyPublicIpv6()
+		if publicIpv6 == "" {
+			log.Println("获取自己的IPV6地址失败！")
+			return
+		}
 	}
+
 	subDomains, err := utils.GetSubDomains(config.ConfigModel.MainDomain)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	log.Printf("%+v", subDomains.DomainRecords.Record)
+	// log.Printf("%+v", subDomains.DomainRecords.Record)
 	var ipv4Finded bool
 	var ipv6Finded bool
 	for _, sub := range subDomains.DomainRecords.Record {
-		if sub.DomainName == config.ConfigModel.MainDomain && sub.RR == config.ConfigModel.SubDomainName {
-			log.Printf("%+v", sub)
-			if sub.Type == "A" {
+		if sub.RR == config.ConfigModel.SubDomainName {
+			if sub.Type == "A" { // V4
 				ipv4Finded = true
-			}
-			if sub.Type == "AAAA" {
+				// 如果域名 IP 与 现在 IP 不一致
+				if sub.Value != publicIpv4 && publicIpv4 != "" {
+					log.Printf("ipv4 与服务器不一致，开始更新， %s->%s", sub.Value, publicIpv4)
+					// 更新域名绑定的 IP 地址。
+					sub.Value = publicIpv4
+					_ = utils.UpdateSubDomain(&sub)
+				}
+			} else if sub.Type == "AAAA" { // V6
 				ipv6Finded = true
-			}
-			if sub.Type == "A" && sub.Value != publicIpv4 && publicIpv4 != "" {
-				log.Printf("%+v", sub)
-				log.Printf("ipv4与服务器不一致，开始更新， %s->%s", sub.Value, publicIpv4)
-				// 更新域名绑定的 IP 地址。
-				sub.Value = publicIpv4
-				utils.UpdateSubDomain(&sub)
-			}
-			if sub.Type == "AAAA" && sub.Value != publicIpv6 && publicIpv6 != "" {
-				log.Printf("%+v", sub)
-				log.Printf("ipv6与服务器不一致，开始更新， %s->%s", sub.Value, publicIpv6)
-				// 更新域名绑定的 IP 地址。
-				sub.Value = publicIpv6
-				utils.UpdateSubDomain(&sub)
+				// 如果域名 IP 与 现在 IP 不一致
+				if sub.Value != publicIpv6 && publicIpv6 != "" {
+					log.Printf("ipv6 与服务器不一致，开始更新， %s->%s", sub.Value, publicIpv6)
+					// 更新域名绑定的 IP 地址。
+					sub.Value = publicIpv6
+					_ = utils.UpdateSubDomain(&sub)
+				}
 			}
 		}
 	}
@@ -188,7 +202,8 @@ func update() {
 	//	"Weight": 1
 	//}
 
-	if !ipv4Finded {
+	// 如果没有相应记录，又想要更新，那就新建一个
+	if !ipv4Finded && (protocol == "ipv4" || protocol == "all") {
 		var sub = &alidns.Record{
 			DomainName: config.ConfigModel.MainDomain,
 			RR:         config.ConfigModel.SubDomainName,
@@ -196,9 +211,10 @@ func update() {
 			Value:      publicIpv4,
 			TTL:        600,
 		}
-		utils.AddSubDomainRecord(sub)
+		log.Println("未找到 IPv4 记录，现尝试创建一个")
+		_ = utils.AddSubDomainRecord(sub)
 	}
-	if !ipv6Finded {
+	if !ipv6Finded && (protocol == "ipv6" || protocol == "all") {
 		var sub = &alidns.Record{
 			DomainName: config.ConfigModel.MainDomain,
 			RR:         config.ConfigModel.SubDomainName,
@@ -206,10 +222,11 @@ func update() {
 			Value:      publicIpv6,
 			TTL:        600,
 		}
-		utils.AddSubDomainRecord(sub)
+		log.Println("未找到 IPv6 记录，现尝试创建一个")
+		_ = utils.AddSubDomainRecord(sub)
 	}
 
-	log.Printf("<<<<<<<<<<<<域名记录更新成功>>>>>>>>>>>")
+	log.Println("<<<<<<<<<<<< 域名记录更新成功 >>>>>>>>>>>")
 }
 
 func timerFunction() error {
@@ -221,7 +238,6 @@ func timerFunction() error {
 			update()
 		}
 	}
-	return errors.New("ddns service stoped")
 }
 
 func buildVersion(version, commit, date, builtBy string) string {

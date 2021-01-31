@@ -85,11 +85,11 @@ You can also use it within a Docker container. To do that, you'll need to
 execute something more-or-less like the following:
 
 ```sh
-$ docker run openiothub/gateway:latest run -i {AccessId} -k {AccessKey} -m {MainDomain} -s {SubDomainName} -c {CheckUpdateInterval}
+$ docker run openiothub/aliddns:latest run -i {AccessId} -k {AccessKey} -m {MainDomain} -s {SubDomainName} -c {CheckUpdateInterval}
 ```
 example:
 ```sh
-$ docker run openiothub/gateway:latest run -i myid -k mykey -m iothub.cloud -s www -c 60
+$ docker run openiothub/aliddns:latest run -i myid -k mykey -m iothub.cloud -s www -c 60
 ```
 Note that the image will almost always have the last stable Go version.
 

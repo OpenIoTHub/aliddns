@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/OpenIoTHub/alidns/config"
+	"github.com/OpenIoTHub/aliddns/config"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"io/ioutil"

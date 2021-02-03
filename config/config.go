@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"github.com/OpenIoTHub/alidns/models"
+	"github.com/OpenIoTHub/aliddns/models"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -19,7 +19,7 @@ var ConfigModel = &models.ConfigModel{
 	MainDomain:          "*example.com",
 	SubDomainName:       "*www",
 	CheckUpdateInterval: 30,
-	Protocol: 			 "all",
+	Protocol:            "all",
 }
 
 //将配置写入指定的路径的文件
@@ -49,7 +49,8 @@ func InitConfigFile() {
 	log.Fatalln("写入配置文件模板出错，请检查本程序是否具有写入权限！或者手动创建配置文件。")
 }
 
-var SupportedProtocols = [3] string {"ipv4", "ipv6", "all"}
+var SupportedProtocols = [3]string{"ipv4", "ipv6", "all"}
+
 func UseConfigFile() {
 	//配置文件存在
 	log.Println("使用的配置文件位置：", ConfigFilePath)

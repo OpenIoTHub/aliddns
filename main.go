@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/OpenIoTHub/alidns/config"
-	"github.com/OpenIoTHub/alidns/utils"
+	"github.com/OpenIoTHub/aliddns/config"
+	"github.com/OpenIoTHub/aliddns/utils"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
 	"github.com/urfave/cli/v2"
 	"log"

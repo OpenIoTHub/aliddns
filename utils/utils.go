@@ -16,6 +16,7 @@ import (
 //u6="http://ipv6.ident.me http://ipv6.icanhazip.com http://ipv6.ident.me http://ipv6.icanhazip.com http://ipv6.yunohost.org http://v6.ipv6-test.com/api/myip.php http://ipv6.ident.me http://ipv6.icanhazip.com http://ipv6.yunohost.org http://v6.ipv6-test.com/api/myip.php http://ipv6.ident.me http://ipv6.icanhazip.com http://ipv6.ident.me http://ipv6.icanhazip.com http://ipv6.yunohost.org http://v6.ipv6-test.com/api/myip.php http://ipv6.ident.me http://ipv6.icanhazip.com http://ipv6.yunohost.org http://v6.ipv6-test.com/api/myip.php"
 
 var Ipv4APIUrls = []string{
+	"http://whatismyip.akamai.com",
 	"http://v4.ipv6-test.com/api/myip.php",
 	"http://checkip.amazonaws.com",
 	"http://members.3322.org/dyndns/getip",
@@ -25,7 +26,6 @@ var Ipv4APIUrls = []string{
 	"http://ipv4.ident.me",
 	"http://ipv4.icanhazip.com",
 	"http://nsupdate.info/myip",
-	"http://whatismyip.akamai.com",
 	"http://ipv4.myip.dk/api/info/IPv4Address",
 	"http://checkip4.spdyn.de",
 	"http://ipinfo.io/ip",

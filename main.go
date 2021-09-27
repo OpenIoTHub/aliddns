@@ -152,8 +152,8 @@ func update() {
 	if protocol == "ipv6" || protocol == "all" {
 		publicIpv6 = utils.GetMyPublicIpv6()
 		if publicIpv6 == "" {
-			log.Println("获取自己的IPV6地址失败！")
-			return
+			log.Println("获取自己的IPV6地址失败！你很可能没有ipv6地址\n" +
+				"Ipv6记录将不会被更新，如果你不希望再看见本警告可以在配置文件中将协议(protocol)由`all`改为`ipv4`或者命令执行时带上`-p ipv4`参数")
 		}
 	}
 

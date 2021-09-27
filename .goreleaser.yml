@@ -103,7 +103,7 @@ dockers:
       - 'openiothub/aliddns:v{{ .Major }}.{{ .Minor }}'
       - 'openiothub/aliddns:latest'
     dockerfile: Dockerfile
-    binaries:
+    ids:
       - aliddns
     build_flag_templates:
       - "--pull"

@@ -4,3 +4,4 @@ maindomain: '*example.com'
 subdomainname: '*www'
 checkupdateinterval: 30
 protocol: all
+apiurl: ip.sb

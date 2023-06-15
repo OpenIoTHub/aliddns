@@ -97,6 +97,14 @@ func main() {
 					EnvVars:     []string{"Protocol"},
 					Destination: &config.ConfigModel.Protocol,
 				},
+				&cli.StringFlag{
+					Name:        "apiurl",
+					Aliases:     []string{"a"},
+					Value:       config.ConfigModel.ApiUrl,
+					Usage:       "ApiUrl",
+					EnvVars:     []string{"ApiUrl"},
+					Destination: &config.ConfigModel.ApiUrl,
+				},
 			},
 			Action: func(c *cli.Context) error {
 				return timerFunction()

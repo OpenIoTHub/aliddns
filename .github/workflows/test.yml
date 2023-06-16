@@ -24,6 +24,8 @@ jobs:
         run: go test ./...
       - name: Build golang src
         run: go build
+      - name: clean
+        run: rm aliddns
       -
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2

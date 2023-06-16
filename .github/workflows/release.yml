@@ -16,9 +16,9 @@ jobs:
           fetch-depth: 0
       -
         name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
-          go-version: 1.15
+          go-version: '^1.20.0'
       - name: Install Snapcraft
         run: |
           sudo snap install snapcraft --classic
@@ -34,6 +34,6 @@ jobs:
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
-          args: release --rm-dist
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

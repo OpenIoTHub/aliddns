@@ -24,6 +24,7 @@ jobs:
       - name: Install Snapcraft
         run: |
           sudo snap install snapcraft --classic
+          hash -r
 #          echo ${{ secrets.SNAPCRAFT_TOKEN }} | snapcraft login --with -
       -
         name: Login to Docker Hub
@@ -35,7 +36,7 @@ jobs:
         name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
-          version: v1.18.2
+          version: latest
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}

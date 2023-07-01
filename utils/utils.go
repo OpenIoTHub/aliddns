@@ -69,7 +69,7 @@ func GetMyPublicIpv4() string {
 }
 
 func GetMyPublicIpv6() string {
-	Ipv6APIUrls = append(Ipv4APIUrls, config.ConfigModel.ApiUrl)
+	Ipv6APIUrls = append(Ipv6APIUrls, config.ConfigModel.ApiUrl)
 	for _, url := range Ipv6APIUrls {
 		resp, err := http.Get(url)
 		if err != nil {

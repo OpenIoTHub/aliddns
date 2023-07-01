@@ -25,6 +25,7 @@ jobs:
         run: |
           sudo snap install snapcraft --classic
           hash -r
+          rm -rf /home/runner/.cache/snapcraft/download
 #          echo ${{ secrets.SNAPCRAFT_TOKEN }} | snapcraft login --with -
       -
         name: Login to Docker Hub

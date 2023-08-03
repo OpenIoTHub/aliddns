@@ -7,7 +7,7 @@ Type=simple
 User=nobody
 Restart=on-failure
 RestartSec=5s
-ExecStart=/usr/local/bin/aliddns -c /etc/aliddns/aliddns.yaml
+ExecStart=/usr/bin/aliddns -c /etc/aliddns/aliddns.yaml
 
 [Install]
 WantedBy=multi-user.target

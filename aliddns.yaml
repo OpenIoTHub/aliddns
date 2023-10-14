@@ -4,5 +4,5 @@ maindomain: '*example.com'
 subdomainname: '*www'
 checkupdateinterval: 30
 protocol: all
-ipv4ApiUrl: ''
-ipv6ApiUrl: ''
+ipv4apiurl: ""
+ipv6apiurl: ""

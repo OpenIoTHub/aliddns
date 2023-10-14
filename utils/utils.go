@@ -4,7 +4,7 @@ import (
 	"github.com/OpenIoTHub/aliddns/config"
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/alidns"
-	"io/ioutil"
+	"io"
 	"log"
 	"net"
 	"net/http"
@@ -44,14 +44,16 @@ var Ipv6APIUrls = []string{
 }
 
 func GetMyPublicIpv4() string {
-	Ipv4APIUrls = append(Ipv4APIUrls, config.ConfigModel.ApiUrl)
+	if config.ConfigModel.Ipv4ApiUrl != "" {
+		Ipv4APIUrls = append([]string{config.ConfigModel.Ipv4ApiUrl}, Ipv4APIUrls...)
+	}
 	for _, url := range Ipv4APIUrls {
 		resp, err := http.Get(url)
 		if err != nil {
 			log.Printf("get public ipv4 err：%s", err)
 			continue
 		}
-		bytes, err := ioutil.ReadAll(resp.Body)
+		bytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			log.Printf("get public ipv4 err：%s", err)
 			_ = resp.Body.Close()
@@ -69,7 +71,9 @@ func GetMyPublicIpv4() string {
 }
 
 func GetMyPublicIpv6() string {
-	Ipv6APIUrls = append(Ipv6APIUrls, config.ConfigModel.ApiUrl)
+	if config.ConfigModel.Ipv6ApiUrl != "" {
+		Ipv6APIUrls = append([]string{config.ConfigModel.Ipv6ApiUrl}, Ipv6APIUrls...)
+	}
 	for _, url := range Ipv6APIUrls {
 		resp, err := http.Get(url)
 		if err != nil {
@@ -77,7 +81,7 @@ func GetMyPublicIpv6() string {
 			continue
 		}
 		// 读取 IPv6
-		bytes, err := ioutil.ReadAll(resp.Body)
+		bytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			log.Printf("get public ipv6 err：%s", err)
 			_ = resp.Body.Close()
@@ -97,7 +101,7 @@ func GetMyPublicIpv6() string {
 	return ""
 }
 
-//TODO Test
+// GetMyIPV6ByLocal TODO Test
 func GetMyIPV6ByLocal() string {
 	s, err := net.InterfaceAddrs()
 	if err != nil {

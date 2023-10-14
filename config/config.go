@@ -20,9 +20,11 @@ var ConfigModel = &models.ConfigModel{
 	SubDomainName:       "*www",
 	CheckUpdateInterval: 30,
 	Protocol:            "all",
+	Ipv4ApiUrl:          "",
+	Ipv6ApiUrl:          "",
 }
 
-//将配置写入指定的路径的文件
+// 将配置写入指定的路径的文件
 func WriteConfigFile(ConfigMode *models.ConfigModel, path string) (err error) {
 	configByte, err := yaml.Marshal(ConfigMode)
 	if err != nil {
@@ -54,7 +56,7 @@ var SupportedProtocols = [3]string{"ipv4", "ipv6", "all"}
 func UseConfigFile() {
 	//配置文件存在
 	log.Println("使用的配置文件位置：", ConfigFilePath)
-	content, err := ioutil.ReadFile(ConfigFilePath)
+	content, err := os.ReadFile(ConfigFilePath)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return
